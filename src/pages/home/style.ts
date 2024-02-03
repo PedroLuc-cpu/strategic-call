@@ -13,13 +13,13 @@ export const Hero = styled('div', {
   maxWidth: 480,
   padding: '0 $10',
 
-  [`${Heading}`]: {
+  [` >${Heading}`]: {
     '@media (max-width: 600px)': {
       fontSize: '6xl',
     },
   },
-
-  [`${Text}`]: {
+  /** usando > é usado é apenas espeficar uma unica tag deve ser estilizado se não será aplicada para todas que tiver usando */
+  [`> ${Text}`]: {
     marginTop: '$2',
     color: '$gray200',
   },
