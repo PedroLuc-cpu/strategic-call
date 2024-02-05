@@ -1,8 +1,36 @@
 import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
-import { Container, Form, Header } from './styles'
+import { Container, Form, FormErro, Header } from './styles'
 import { ArrowRight } from '@phosphor-icons/react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const registerFormSchema = z.object({
+  username: z
+    .string()
+    .min(3, { message: 'usuario dever conter 3 caracteres.' })
+    .regex(/^([a-z\\-]+)$/i, {
+      message: 'O usuario pode ter apenas caracteres e hifens.',
+    })
+    .transform((username) => username.toLowerCase()),
+  name: z.string().min(3, { message: 'O nome dever conter 3 caracteres.' }),
+})
+
+type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerFormSchema),
+  })
+
+  async function handleRegister(data: RegisterFormData) {
+    console.log(data)
+  }
+
   return (
     <Container>
       <Header>
@@ -13,20 +41,33 @@ export default function Register() {
         </Text>
         <MultiStep size={4} currentStep={1} />
       </Header>
-      <Form as="form">
+      <Form as="form" onSubmit={handleSubmit(handleRegister)}>
         <label>
           <Text size={'sm'}>Nome do usuário</Text>
           <TextInput
+            {...register('username')}
             prefix="strategic.com/"
             crossOrigin="anonymous"
             placeholder="seu usuário"
+            autoComplete="off"
           />
+          {errors.username && (
+            <FormErro size={'sm'}>{errors.username.message}</FormErro>
+          )}
         </label>
         <label>
           <Text size={'sm'}>Nome completo</Text>
-          <TextInput crossOrigin="anonymous" placeholder="seu nome" />
+          <TextInput
+            {...register('name')}
+            crossOrigin="anonymous"
+            placeholder="seu nome"
+            autoComplete="off"
+          />
+          {errors.name && (
+            <FormErro size={'sm'}>{errors.name.message}</FormErro>
+          )}
         </label>
-        <Button type="submit">
+        <Button type="submit" disabled={isSubmitting}>
           Próximo passo <ArrowRight />
         </Button>
       </Form>
