@@ -1,10 +1,21 @@
 import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
 import { Container, Header } from '../styles'
-import { ArrowRight } from '@phosphor-icons/react'
-import { ConnectBox, ConnectItem } from './styles'
-import { signIn } from 'next-auth/react'
+import { ArrowRight, Check } from '@phosphor-icons/react'
+import { AuthError, ConnectBox, ConnectItem } from './styles'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
 export default function Register() {
+  const router = useRouter()
+  const session = useSession()
+
+  const hasAuthError = !!router.query.error
+  const isSignIn = session.status === 'authenticated'
+
+  const handleConnectCalendar = () => {
+    signIn('google', { callbackUrl: '/register/connect-calendar' })
+  }
+
   return (
     <Container>
       <Header>
@@ -19,16 +30,29 @@ export default function Register() {
       <ConnectBox>
         <ConnectItem>
           <Text>Google Canlendar</Text>
-          <Button
-            variant={'secondary'}
-            size={'sm'}
-            onClick={() => signIn('google')}
-          >
-            Conectar
-            <ArrowRight />
-          </Button>
+          {isSignIn ? (
+            <Button variant={'secondary'} size={'sm'} disabled>
+              Conectado
+              <Check />
+            </Button>
+          ) : (
+            <Button
+              variant={'secondary'}
+              size={'sm'}
+              onClick={handleConnectCalendar}
+            >
+              Conectar
+              <ArrowRight />
+            </Button>
+          )}
         </ConnectItem>
-        <Button type="submit">
+        {hasAuthError && (
+          <AuthError size={'sm'}>
+            Falha ao se conectar ao Google, verfique se você habilitou as
+            permissões de acesso ao Google Canlendar.
+          </AuthError>
+        )}
+        <Button type="submit" disabled={!isSignIn}>
           Próximo passo <ArrowRight />
         </Button>
       </ConnectBox>
