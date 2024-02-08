@@ -52,7 +52,11 @@ export default function ConnectCalendar() {
             permissões de acesso ao Google Canlendar.
           </AuthError>
         )}
-        <Button type="submit" disabled={!isSignIn}>
+        <Button
+          type="submit"
+          disabled={!isSignIn}
+          onClick={() => router.push('/register/time-intervals')}
+        >
           Próximo passo <ArrowRight />
         </Button>
       </ConnectBox>
