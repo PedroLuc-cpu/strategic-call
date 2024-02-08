@@ -16,6 +16,10 @@ export default function ConnectCalendar() {
     signIn('google', { callbackUrl: '/register/connect-calendar' })
   }
 
+  async function handleNext() {
+    await router.push('/register/time-intervals')
+  }
+
   return (
     <Container>
       <Header>
@@ -52,11 +56,7 @@ export default function ConnectCalendar() {
             permissões de acesso ao Google Canlendar.
           </AuthError>
         )}
-        <Button
-          type="submit"
-          disabled={!isSignIn}
-          onClick={() => router.push('/register/time-intervals')}
-        >
+        <Button type="submit" disabled={!isSignIn} onClick={handleNext}>
           Próximo passo <ArrowRight />
         </Button>
       </ConnectBox>
