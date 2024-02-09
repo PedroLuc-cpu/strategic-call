@@ -23,6 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { convertTimeStringToMinutes } from '@/utils/convert-time-string-to-minutes'
 import { api } from '@/lib/axios'
 import { AxiosError } from 'axios'
+import { useRouter } from 'next/router'
 
 const timeIntervalTimeFormSchema = z.object({
   intervals: z
@@ -97,10 +98,13 @@ export default function TimeIntervals() {
   })
   const intervals = watch('intervals')
 
+  const router = useRouter()
+
   async function handleSetTimeIntervals(data: unknown) {
     const { intervals } = data as TimeIntervalsFormOutput
     try {
       await api.post('/users/time-intervals', { intervals })
+      await router.push('/register/update-profile')
     } catch (error) {
       if (error instanceof AxiosError && error?.response?.data?.message) {
         alert(error.response.data.message)
