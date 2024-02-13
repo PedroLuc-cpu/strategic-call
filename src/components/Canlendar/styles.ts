@@ -15,6 +15,7 @@ export const CanlendarHeader = styled('div', {
 
 export const CanlendarTitle = styled(Text, {
   fontWeight: '$medium',
+  textTransform: 'capitalize',
   span: {
     color: '$gray200',
   },
