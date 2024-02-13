@@ -80,7 +80,7 @@ export const CanlendarDay = styled('button', {
 
   '&:disabled': {
     background: 'none',
-    cursor: 'pointer',
+    cursor: 'not-allowed',
     opacity: 0.4,
   },
 
