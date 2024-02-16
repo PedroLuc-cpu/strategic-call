@@ -42,7 +42,7 @@ export default function UpdateProfile() {
       await api.put('/users/profile', {
         bio: data.bio,
       })
-      await router.push(`/schedules/${session.data?.user.username}`)
+      await router.push(`/schedule/${session.data?.user.username}`)
     } catch (error) {
       if (error instanceof AxiosError && error?.response?.data?.message) {
         alert(error.response.data.message)
